@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Project - Online Quiz Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card card-custom p-4 p-md-5">
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-bold mb-3 d-inline-block" style="width: fit-content;">
+                    <i class="bi bi-file-earmark-text-fill me-1"></i> Technical Documentation
+                </span>
+                <h1 class="fw-bold mb-3">Online Quiz Management System</h1>
+                <p class="text-muted lead mb-4">
+                    A Full-Stack Java Enterprise Web Application developed for academic submission and evaluation.
+                </p>
+
+                <hr class="my-4">
+
+                <!-- Abstract -->
+                <h4 class="fw-bold text-primary mb-3"><i class="bi bi-journal-text me-2"></i> Project Abstract</h4>
+                <p class="text-secondary leading-relaxed">
+                    The <strong>Online Quiz Management System</strong> is a full-stack, secure, multi-role web platform
+                    designed to automate the authoring, delivery, and evaluation of objective examinations.
+                    Traditional paper-based examination systems suffer from high administrative overhead, manual grading delays,
+                    and susceptibility to human error. This application resolves these challenges through a centralized
+                    role-based architecture where administrators configure quizzes with configurable time limits, marks, and passing criteria,
+                    while students engage in interactive timed assessments with instant server-side score calculation and comprehensive performance breakdowns.
+                </p>
+
+                <!-- Architecture -->
+                <h4 class="fw-bold text-primary mt-4 mb-3"><i class="bi bi-layers-fill me-2"></i> Architectural Design</h4>
+                <p class="text-secondary">
+                    The application adheres to the standard <strong>Layered Architecture</strong> (Separation of Concerns):
+                </p>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border text-center">
+                            <span class="badge bg-dark mb-2">Presentation Layer</span>
+                            <div class="fw-bold">Thymeleaf & Bootstrap 5</div>
+                            <small class="text-muted">Dynamic HTML5 UI, CSS3, JavaScript</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border text-center">
+                            <span class="badge bg-primary mb-2">Controller Layer</span>
+                            <div class="fw-bold">Spring MVC Controllers</div>
+                            <small class="text-muted">HTTP routing, Request validation & mapping</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border text-center">
+                            <span class="badge bg-success mb-2">Service Layer</span>
+                            <div class="fw-bold">Spring Services</div>
+                            <small class="text-muted">Business logic, Scoring, Security rules</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded border text-center">
+                            <span class="badge bg-info text-dark mb-2">Persistence Layer</span>
+                            <div class="fw-bold">Spring Data JPA / MySQL</div>
+                            <small class="text-muted">Hibernate ORM, Relational entities & DDL</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Design -->
+                <h4 class="fw-bold text-primary mt-3 mb-3"><i class="bi bi-database me-2"></i> Relational Entities</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-custom">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Entity / Table</th>
+                                <th>Primary Key</th>
+                                <th>Foreign Keys</th>
+                                <th>Key Attributes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>User</strong> (<code>users</code>)</td>
+                                <td><code>id</code></td>
+                                <td>None</td>
+                                <td><code>fullName</code>, <code>email</code> (Unique), <code>password</code> (BCrypt), <code>role</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Quiz</strong> (<code>quizzes</code>)</td>
+                                <td><code>id</code></td>
+                                <td>None</td>
+                                <td><code>title</code>, <code>description</code>, <code>durationMinutes</code>, <code>totalMarks</code>, <code>passingMarks</code>, <code>active</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Question</strong> (<code>questions</code>)</td>
+                                <td><code>id</code></td>
+                                <td><code>quiz_id</code> &rarr; <code>quizzes(id)</code></td>
+                                <td><code>questionText</code>, <code>marks</code>, <code>questionType</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Option</strong> (<code>options</code>)</td>
+                                <td><code>id</code></td>
+                                <td><code>question_id</code> &rarr; <code>questions(id)</code></td>
+                                <td><code>optionText</code>, <code>isCorrect</code> (Boolean flag)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>QuizAttempt</strong> (<code>quiz_attempts</code>)</td>
+                                <td><code>id</code></td>
+                                <td><code>student_id</code>, <code>quiz_id</code></td>
+                                <td><code>startTime</code>, <code>submissionTime</code>, <code>score</code>, <code>percentage</code>, <code>status</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>StudentAnswer</strong> (<code>student_answers</code>)</td>
+                                <td><code>id</code></td>
+                                <td><code>attempt_id</code>, <code>question_id</code>, <code>selected_option_id</code></td>
+                                <td><code>marksAwarded</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Security Model -->
+                <h4 class="fw-bold text-primary mt-4 mb-3"><i class="bi bi-shield-lock-fill me-2"></i> Security Implementation</h4>
+                <ul class="text-secondary">
+                    <li><strong>Authentication:</strong> Managed by Spring Security 6 with <code>UserDetailsService</code> and session cookies.</li>
+                    <li><strong>Password Hashing:</strong> BCrypt algorithm with salted multi-round encryption.</li>
+                    <li><strong>Authorization:</strong> Strict URL ant-matchers enforcing <code>ROLE_ADMIN</code> on <code>/admin/**</code> and <code>ROLE_STUDENT</code> on <code>/student/**</code>.</li>
+                    <li><strong>Cheat Prevention:</strong> Question options sent to the student browser exclude the <code>isCorrect</code> attribute. Scores are calculated exclusively on the backend upon submission.</li>
+                    <li><strong>Duplicate Prevention:</strong> Prevents multiple submissions of the same attempt through atomic state transitions.</li>
+                </ul>
+
+                <div class="mt-4 text-center">
+                    <a th:href="@{/}" class="btn btn-outline-primary px-4 me-2">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Home
+                    </a>
+                    <a th:href="@{/login}" class="btn btn-primary px-4">
+                        Proceed to Login <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

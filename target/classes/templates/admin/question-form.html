@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Edit Question' : 'Add New Question'}">Question Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card card-custom p-4 p-md-5 shadow">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary mb-1">
+                            <span th:text="${quiz.title}">Quiz Title</span>
+                        </span>
+                        <h3 class="fw-bold mb-0" th:text="${isEdit ? 'Edit MCQ Question' : 'Add New MCQ Question'}">Add Question</h3>
+                    </div>
+                    <a th:href="@{'/admin/quizzes/' + ${quiz.id} + '/questions'}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Questions
+                    </a>
+                </div>
+
+                <!-- Form -->
+                <form th:action="@{'/admin/quizzes/' + ${quiz.id} + '/questions/save'}" th:object="${questionForm}" method="post">
+                    <!-- Hidden IDs -->
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{quizId}">
+
+                    <!-- Question Text -->
+                    <div class="mb-3">
+                        <label for="questionText" class="form-label fw-semibold">Question Statement <span class="text-danger">*</span></label>
+                        <textarea id="questionText" th:field="*{questionText}" class="form-control" rows="3"
+                                  th:classappend="${#fields.hasErrors('questionText')} ? 'is-invalid' : ''"
+                                  placeholder="Type the multiple-choice question clearly here..." required autofocus></textarea>
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('questionText')}" th:errors="*{questionText}"></div>
+                    </div>
+
+                    <!-- Marks -->
+                    <div class="mb-4" style="max-width: 200px;">
+                        <label for="marks" class="form-label fw-semibold">Marks Awarded <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-award"></i></span>
+                            <input type="number" id="marks" th:field="*{marks}" min="1" max="100" class="form-control" required>
+                        </div>
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('marks')}" th:errors="*{marks}"></div>
+                    </div>
+
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-ui-radios text-primary me-2"></i> Multiple-Choice Options (4 Options)</h5>
+                    <p class="text-muted small mb-3">Provide 4 distinct options and select the radio button next to the single correct answer.</p>
+
+                    <!-- Option A -->
+                    <div class="mb-3 p-3 bg-light rounded-3 border">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{correctOption}" value="1" id="correct1" required>
+                                <label class="form-check-label fw-bold" for="correct1">Option A (Correct?)</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <input type="text" th:field="*{option1}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('option1')} ? 'is-invalid' : ''"
+                                   placeholder="Enter Option A text" required>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('option1')}" th:errors="*{option1}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Option B -->
+                    <div class="mb-3 p-3 bg-light rounded-3 border">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{correctOption}" value="2" id="correct2">
+                                <label class="form-check-label fw-bold" for="correct2">Option B (Correct?)</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <input type="text" th:field="*{option2}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('option2')} ? 'is-invalid' : ''"
+                                   placeholder="Enter Option B text" required>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('option2')}" th:errors="*{option2}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Option C -->
+                    <div class="mb-3 p-3 bg-light rounded-3 border">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{correctOption}" value="3" id="correct3">
+                                <label class="form-check-label fw-bold" for="correct3">Option C (Correct?)</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <input type="text" th:field="*{option3}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('option3')} ? 'is-invalid' : ''"
+                                   placeholder="Enter Option C text" required>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('option3')}" th:errors="*{option3}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Option D -->
+                    <div class="mb-4 p-3 bg-light rounded-3 border">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{correctOption}" value="4" id="correct4">
+                                <label class="form-check-label fw-bold" for="correct4">Option D (Correct?)</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <input type="text" th:field="*{option4}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('option4')} ? 'is-invalid' : ''"
+                                   placeholder="Enter Option D text" required>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('option4')}" th:errors="*{option4}"></div>
+                        </div>
+                    </div>
+
+                    <div class="invalid-feedback d-block mb-3" th:if="${#fields.hasErrors('correctOption')}" th:errors="*{correctOption}"></div>
+
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{'/admin/quizzes/' + ${quiz.id} + '/questions'}" class="btn btn-outline-secondary px-4">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                            <i class="bi bi-save me-1"></i> <span th:text="${isEdit ? 'Update Question' : 'Save Question'}">Save</span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
